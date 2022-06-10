@@ -1,15 +1,26 @@
-import 'package:bmi_calculator/components/re_usable_widget.dart';
 import 'package:bmi_calculator/constants.dart';
 import 'package:flutter/material.dart';
 
+import '../components/re_usable_widget.dart';
+
 class ResultPage extends StatelessWidget {
-  const ResultPage({Key? key}) : super(key: key);
+  const ResultPage(
+      {Key? key,
+      required this.resultTitle,
+      required this.bmiResult,
+      required this.interpretation})
+      : super(key: key);
+
+  final String resultTitle;
+  final String bmiResult;
+  final String interpretation;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('BMI Result'),
+        title: const Text('⚖ BMI Result'),
+        centerTitle: true,
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -17,35 +28,37 @@ class ResultPage extends StatelessWidget {
         children: [
           Expanded(
             child: Container(
-              margin: const EdgeInsets.only(left: 15, top: 65),
+              //margin: const EdgeInsets.only(left: 15, top: 65),
+              padding: const EdgeInsets.only(left: 20),
+              alignment: Alignment.bottomLeft,
               child: const Text(
-                'Your Result',
+                'Your Result:',
                 style: kBigTextStyle,
               ),
             ),
           ),
           Expanded(
             flex: 5,
-            child: ReUsable_Widget(
+            child: ReUsableWidget(
               propertyColor: kActiveColor,
               childWidget: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Text(
-                    'OVERWEIGHT',
+                  Text(
+                    resultTitle.toUpperCase(),
                     style: kBodyStatusStyle,
                   ),
-                  const Text(
-                    '30.6',
+                  Text(
+                    bmiResult,
                     style: kStyleResultNum,
                   ),
                   Container(
                     padding: const EdgeInsets.only(left: 15, right: 15),
-                    child: const Text(
-                      'You are over fated, You need to stay more fasting. Don\'t ete, Don\'t drink. Only stay on fasting mood.',
+                    child: Text(
+                      interpretation,
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: const TextStyle(
                           color: Colors.black,
                           fontSize: 22,
                           fontWeight: FontWeight.w300),
@@ -76,24 +89,24 @@ class ResultPage extends StatelessWidget {
                         style: kBottomTextStyle,
                       ),
                       Divider(
-                        color: Colors.blueGrey,
-                        thickness: 5.00,
+                        color: Colors.black,
+                        thickness: 0.5,
                         height: 2,
                         indent: 120,
                         endIndent: 120,
                       ),
                       SizedBox(height: 5),
                       Divider(
-                        color: Colors.blueGrey,
-                        thickness: 5.00,
+                        color: Colors.black,
+                        thickness: 0.5,
                         height: 2,
                         indent: 150,
                         endIndent: 150,
                       ),
                       SizedBox(height: 5),
                       Divider(
-                        color: Colors.blueGrey,
-                        thickness: 5.00,
+                        color: Colors.black,
+                        thickness: 0.5,
                         height: 2,
                         indent: 180,
                         endIndent: 180,

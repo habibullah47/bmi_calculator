@@ -1,6 +1,7 @@
+import 'package:bmi_calculator/provider/theme_provider.dart';
 import 'package:flutter/material.dart';
 
-import 'input_p.dart';
+import 'screens/input_p.dart';
 
 void main() => runApp(const HealthCalculator());
 
@@ -10,12 +11,11 @@ class HealthCalculator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: const InputP(),
-      theme: ThemeData().copyWith(
-          appBarTheme: const AppBarTheme(
-            color: Colors.green,
-          ),
-          scaffoldBackgroundColor: Colors.white),
+      themeMode: ThemeMode.system,
+      theme: MyThemes.lightTheme,
+      darkTheme: MyThemes.darkTheme,
     );
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'constants.dart';
+import '../constants.dart';
 
 //this widget was an StatelessWidget,
 class ColorText extends StatefulWidget {

@@ -2,15 +2,32 @@
 
 A new BMI Calculator.
 
-## Getting Started
+## Note about this app
 
-This project is a starting point for a Flutter application.
+###I use this code for if else:
+selectedGender == GenderType.male? inactiveColor: activeColor,
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+####Instead of this old and messy if/else code
+// void updateColor(GenderType selectedGender) {
+//   //gender =1; female = 2
+//   if (selectedGender == GenderType.male) {
+//     if (maleCardColor == inactiveColor) {
+//       maleCardColor = activeColor;
+//       femaleCardColor = inactiveColor;
+//     } else {
+//       maleCardColor = inactiveColor;
+//     }
+//   }
+//   if (selectedGender == GenderType.female) {
+//     if (femaleCardColor == inactiveColor) {
+//       femaleCardColor = activeColor;
+//       maleCardColor = inactiveColor;
+//     } else {
+//       femaleCardColor = inactiveColor;
+//     }
+//   }
+//
+// }
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+

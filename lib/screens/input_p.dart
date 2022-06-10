@@ -1,9 +1,13 @@
+import 'dart:async';
+
+import 'package:bmi_calculator/components/bmi_brain.dart';
+import 'package:bmi_calculator/components/count_button.dart';
+import 'package:bmi_calculator/components/drawer_widget.dart';
 import 'package:bmi_calculator/components/re_usable_widget.dart';
-import 'package:bmi_calculator/widgets/ResultPage.dart';
+import 'package:bmi_calculator/screens/ResultPage.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../components/color_and_text.dart';
 import '../constants.dart';
 
 enum Gender {
@@ -27,12 +31,24 @@ class _InputPState extends State<InputP> {
   int height = 172;
   int weight = 50;
   int age = 30;
+  Timer? timer;
 
   @override
   Widget build(BuildContext context) {
+    final text = MediaQuery.of(context).platformBrightness == Brightness.dark
+        ? 'darkTheme'
+        : 'lightTheme';
     return Scaffold(
       appBar: AppBar(
-        title: const Text('A new edge BMI Calculator'),
+        title: Text('🪡 haZa $text BMI Calculator'),
+        centerTitle: true,
+      ),
+      drawer: const ClipRRect(
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(100),
+          bottomRight: Radius.circular(100),
+        ),
+        child: DrawerWidget(),
       ),
       body: SafeArea(
         child: Column(
@@ -41,40 +57,29 @@ class _InputPState extends State<InputP> {
               child: Row(
                 children: [
                   Expanded(
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          selectedGender = Gender.male;
-                        });
-                      },
-                      child: ReUsable_Widget(
-                        propertyColor: selectedGender == Gender.male
-                            ? kInactiveColor
-                            : kActiveColor,
-                        childWidget: const ColorText(
-                          label: 'MALE',
+                      child: GenderWidget(
+                          propertyColor: selectedGender == Gender.male
+                              ? kInactiveColor
+                              : kActiveColor,
                           icon: FontAwesomeIcons.mars,
-                        ),
-                      ),
-                    ),
-                  ),
+                          label: 'MALE',
+                          onPressed: () {
+                            setState(() {
+                              selectedGender = Gender.male;
+                            });
+                          })),
                   Expanded(
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          selectedGender = Gender.female;
-                        });
-                      },
-                      child: ReUsable_Widget(
+                    child: GenderWidget(
                         propertyColor: selectedGender == Gender.female
                             ? kInactiveColor
                             : kActiveColor,
-                        childWidget: const ColorText(
-                          label: 'FEMALE',
-                          icon: FontAwesomeIcons.venus,
-                        ),
-                      ),
-                    ),
+                        icon: FontAwesomeIcons.venus,
+                        label: 'FEMALE',
+                        onPressed: () {
+                          setState(() {
+                            selectedGender = Gender.female;
+                          });
+                        }),
                   ),
                 ],
               ),
@@ -83,7 +88,7 @@ class _InputPState extends State<InputP> {
               child: Row(
                 children: [
                   Expanded(
-                    child: ReUsable_Widget(
+                    child: ReUsableWidget(
                       childWidget: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -137,7 +142,7 @@ class _InputPState extends State<InputP> {
               child: Row(
                 children: [
                   Expanded(
-                    child: ReUsable_Widget(
+                    child: ReUsableWidget(
                       childWidget: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -155,37 +160,49 @@ class _InputPState extends State<InputP> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              RawMaterialButton(
-                                fillColor: kBottomContainerColor,
-                                elevation: 10,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(25)),
-                                constraints: const BoxConstraints(
-                                    minHeight: 60.00, minWidth: 56.00),
-                                child: const Icon(FontAwesomeIcons.minus),
-                                onPressed: () {
-                                  setState(
-                                    () {
+                              CountButton(
+                                iconWidget: const Icon(FontAwesomeIcons.minus),
+                                onLongPress: () {
+                                  timer = Timer.periodic(
+                                      const Duration(milliseconds: 300),
+                                      (timer) {
+                                    setState(() {
                                       weight--;
-                                    },
-                                  );
+                                    });
+                                  });
                                 },
-                              ),
-                              const SizedBox(width: 15),
-                              RawMaterialButton(
-                                fillColor: kBottomContainerColor,
-                                elevation: 10,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(25)),
-                                constraints: const BoxConstraints(
-                                    minHeight: 60.00, minWidth: 56.00),
-                                child: const Icon(FontAwesomeIcons.plus),
-                                onPressed: () {
+                                onPress: () {
                                   setState(
                                     () {
                                       weight++;
                                     },
                                   );
+                                },
+                                onLongPressEnd: (details) {
+                                  timer?.cancel();
+                                },
+                              ),
+                              const SizedBox(width: 15),
+                              CountButton(
+                                iconWidget: const Icon(FontAwesomeIcons.plus),
+                                onLongPress: () {
+                                  timer = Timer.periodic(
+                                      const Duration(milliseconds: 300),
+                                      (timer) {
+                                    setState(() {
+                                      weight++;
+                                    });
+                                  });
+                                },
+                                onPress: () {
+                                  setState(
+                                    () {
+                                      weight++;
+                                    },
+                                  );
+                                },
+                                onLongPressEnd: (details) {
+                                  timer?.cancel();
                                 },
                               ),
                             ],
@@ -196,7 +213,7 @@ class _InputPState extends State<InputP> {
                     ),
                   ),
                   Expanded(
-                    child: ReUsable_Widget(
+                    child: ReUsableWidget(
                       childWidget: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -214,37 +231,49 @@ class _InputPState extends State<InputP> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              RawMaterialButton(
-                                fillColor: kBottomContainerColor,
-                                elevation: 10,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(25)),
-                                constraints: const BoxConstraints(
-                                    minHeight: 60.00, minWidth: 56.00),
-                                child: const Icon(FontAwesomeIcons.minus),
-                                onPressed: () {
+                              CountButton(
+                                iconWidget: const Icon(FontAwesomeIcons.minus),
+                                onLongPress: () {
+                                  timer = Timer.periodic(
+                                      const Duration(milliseconds: 300),
+                                      (timer) {
+                                    setState(() {
+                                      age--;
+                                    });
+                                  });
+                                },
+                                onPress: () {
                                   setState(
                                     () {
                                       age--;
                                     },
                                   );
                                 },
+                                onLongPressEnd: (details) {
+                                  timer?.cancel();
+                                },
                               ),
                               const SizedBox(width: 15),
-                              RawMaterialButton(
-                                fillColor: kBottomContainerColor,
-                                elevation: 10,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(25)),
-                                constraints: const BoxConstraints(
-                                    minHeight: 60.00, minWidth: 56.00),
-                                child: const Icon(FontAwesomeIcons.plus),
-                                onPressed: () {
+                              CountButton(
+                                iconWidget: const Icon(FontAwesomeIcons.plus),
+                                onLongPress: () {
+                                  timer = Timer.periodic(
+                                      const Duration(milliseconds: 300),
+                                      (timer) {
+                                    setState(() {
+                                      age++;
+                                    });
+                                  });
+                                },
+                                onPress: () {
                                   setState(
                                     () {
                                       age++;
                                     },
                                   );
+                                },
+                                onLongPressEnd: (details) {
+                                  timer?.cancel();
                                 },
                               ),
                             ],
@@ -259,10 +288,16 @@ class _InputPState extends State<InputP> {
             ),
             GestureDetector(
               onTap: () {
+                BMIBrain calc = BMIBrain(height: height, weight: weight);
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const ResultPage()));
+                        builder: (context) => ResultPage(
+                              bmiResult: calc.calculateBMI().toStringAsFixed(1),
+                              interpretation: calc.getInterpretation(),
+                              resultTitle: calc.getResult(),
+                            )));
+                //calc need for getting information from BMIBrain to use in ResultPage()
               },
               child: Container(
                   padding: const EdgeInsets.only(bottom: 20),
@@ -281,7 +316,7 @@ class _InputPState extends State<InputP> {
                       ),
                       Divider(
                         color: Colors.blueGrey,
-                        thickness: 5.00,
+                        thickness: 0.5,
                         height: 2,
                         indent: 120,
                         endIndent: 120,
@@ -289,7 +324,7 @@ class _InputPState extends State<InputP> {
                       SizedBox(height: 5),
                       Divider(
                         color: Colors.blueGrey,
-                        thickness: 5.00,
+                        thickness: 0.5,
                         height: 2,
                         indent: 150,
                         endIndent: 150,
@@ -297,7 +332,7 @@ class _InputPState extends State<InputP> {
                       SizedBox(height: 5),
                       Divider(
                         color: Colors.blueGrey,
-                        thickness: 5.00,
+                        thickness: 0.5,
                         height: 2,
                         indent: 180,
                         endIndent: 180,
